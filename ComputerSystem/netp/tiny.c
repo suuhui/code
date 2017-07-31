@@ -46,6 +46,9 @@ void doit(int fd)
 		return;
 	}
 
+	/* output first request header */
+	printf("%s\n", buf);
+	/* output other request header */
 	read_requesthdrs(&rio);
 
 	is_static = parse_uri(uri, filename, cgiargs);
@@ -141,7 +144,6 @@ void serve_static(int fd, char *filename, int filesize)
     get_filetype(filename, filetype);
     sprintf(buf, "HTTP/1.0 200 OK\r\n");
     sprintf(buf, "%sServer: Tiny Web Server\r\n", buf);
-    sprintf(buf, "%sConnection: close\r\n", buf);
     sprintf(buf, "%sContent-length: %d\r\n", buf, filesize);
     sprintf(buf, "%sContent-type: %s\r\n\r\n", buf, filetype);
     Rio_writen(fd, buf, strlen(buf));
@@ -164,6 +166,10 @@ void get_filetype(char *filename, char *filetype)
 		strcpy(filetype, "image/gif");
 	else if(strstr(filename, ".jpg"))
 		strcpy(filetype, "image/jpeg");
+	else if(strstr(filename, ".mp4"))
+		strcpy(filetype, "video/mp4");
+	else if(strstr(filename, ".mp3"))
+		strcpy(filetype, "audio/mpeg");
 	else
 		strcpy(filetype, "text/plain");
 }
