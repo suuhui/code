@@ -2,6 +2,7 @@
 
 void doit(int fd);
 void read_requesthdrs(rio_t *rp);
+void read_requestbody(rio_t *rp);
 int parse_uri(char *uri, char *filename, char *cgiargs);
 void get_filetype(char *filename, char *filetype);
 void serve_static(int fd, char *filename, int filesize);
@@ -40,18 +41,26 @@ void doit(int fd)
 	Rio_readinitb(&rio, fd);
 	Rio_readlineb(&rio, buf, MAXLINE);
 	sscanf(buf, "%s %s %s", method, uri, version);
-	if(strcasecmp(method, "GET")) {
+	if(strcasecmp(method, "GET") == 0){
+	
+	} else if(strcasecmp(method, "POST") == 0){
+		
+	} else {
 		clienterror(fd, method, "501", "Not Implemented",
 					"Tiny does not implement this method");	
 		return;
 	}
 
+	printf("####################request start########################\r\n");
 	/* output first request header */
 	printf("%s\n", buf);
 	/* output other request header */
 	read_requesthdrs(&rio);
+	
+	//read_requestbody(&rio);
 
 	is_static = parse_uri(uri, filename, cgiargs);
+	printf("is static: %d\r\n", is_static);
 	if(stat(filename, &sbuf) < 0) {
 		clienterror(fd, filename, "404", "Not Found",
 					"Tiny could't found this file");	
@@ -83,7 +92,7 @@ void clienterror(int fd, char *cause, char *errnum, char *shortmsg,
 	char buf[MAXLINE], body[MAXLINE];
 
 	sprintf(body, "<html><title>Tiny Error</title>");
-	sprintf(body, "%s<body bgcolor=""#000""\r\n", body);	
+	sprintf(body, "%s<body bgcolor=""#fff""\r\n", body);	
 	sprintf(body, "%s%s: %s\r\n", body, errnum, shortmsg);
 	sprintf(body, "%s<p>%s: %s\r\n", body, longmsg, cause);
 	sprintf(body, "%s<hr><em>The Tiny Web Server</em>\r\n", body);
@@ -100,12 +109,34 @@ void clienterror(int fd, char *cause, char *errnum, char *shortmsg,
 void read_requesthdrs(rio_t *rp)
 {
 	char buf[MAXLINE];
-	 
-	Rio_readlineb(rp, buf, MAXLINE);
+	int n; 
+	n = Rio_readlineb(rp, buf, MAXLINE);
+	printf("received: %d\r\n", n);
 	while(strcmp(buf, "\r\n")) {
-		Rio_readlineb(rp, buf, MAXLINE);	
+	//while(n > 0) {
+		n = Rio_readlineb(rp, buf, MAXLINE);	
+		printf("received: %d\r\n", n);
 		printf("%s", buf);
 	}
+	printf("#####################request end#######################\r\n");
+	return;
+}
+
+void read_requestbody(rio_t *rp)
+{
+	char buf[MAXLINE];
+	int n; //size of read 
+	printf("######################request body##########################\r\n");
+	while(1) {
+		printf("???????????????????????????????????????");
+		n = Rio_readlineb(rp, buf, MAXLINE);	
+		printf("%s", buf);
+		if(n < 0)
+			return;
+		if(n == 0)
+			break;
+	}
+	printf("####################request body end#####################\r\n");
 	return;
 }
 
