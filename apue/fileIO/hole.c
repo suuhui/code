@@ -13,7 +13,7 @@ int main()
 	if(write(fd, buf1, 10) != 10)
 		err_sys("buf1 write error");
 
-	if(lseek(fd, 10240, SEEK_SET) == -1)
+	if(lseek(fd, 102400, SEEK_SET) == -1)
 		err_sys("lseek error");
 
 	if(write(fd, buf2, 10) != 10)
