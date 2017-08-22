@@ -60,7 +60,6 @@ void doit(int fd)
 	//read_requestbody(&rio);
 
 	is_static = parse_uri(uri, filename, cgiargs);
-	printf("is static: %d\r\n", is_static);
 	if(stat(filename, &sbuf) < 0) {
 		clienterror(fd, filename, "404", "Not Found",
 					"Tiny could't found this file");	
@@ -111,12 +110,9 @@ void read_requesthdrs(rio_t *rp)
 	char buf[MAXLINE];
 	int n; 
 	n = Rio_readlineb(rp, buf, MAXLINE);
-	printf("received: %d\r\n", n);
 	while(strcmp(buf, "\r\n")) {
-	//while(n > 0) {
-		n = Rio_readlineb(rp, buf, MAXLINE);	
-		printf("received: %d\r\n", n);
 		printf("%s", buf);
+		n = Rio_readlineb(rp, buf, MAXLINE);	
 	}
 	printf("#####################request end#######################\r\n");
 	return;
@@ -127,14 +123,11 @@ void read_requestbody(rio_t *rp)
 	char buf[MAXLINE];
 	int n; //size of read 
 	printf("######################request body##########################\r\n");
-	while(1) {
-		printf("???????????????????????????????????????");
+	n = Rio_readlineb(rp, buf, MAXLINE);
+	printf("%s", buf);
+	while(n != 0) {
 		n = Rio_readlineb(rp, buf, MAXLINE);	
 		printf("%s", buf);
-		if(n < 0)
-			return;
-		if(n == 0)
-			break;
 	}
 	printf("####################request body end#####################\r\n");
 	return;
