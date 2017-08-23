@@ -25,6 +25,7 @@ void hsort(int * tree, int n)
 	for(i=2; i<n; i++)
 		siftup(tree, i);
 	
+	/* note: n is 21, when ergodic array from top ,init i=n-1 */
 	for(i=n-1; i>1; i--) {
 		swap(tree, 1, i);
 		siftdown(tree, i-1);
