@@ -160,6 +160,6 @@ void pr_exit(int status)
 #else
 		"");
 #endif
-	else if(WIFSTOPPEN(status))
+	else if(WIFSTOPPED(status))
 		printf("child stopped, signal number = %d\n", WSTOPSIG(status));
 }
