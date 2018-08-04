@@ -1,0 +1,12 @@
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_PROGRAM_VERSION	5.8	//
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+http	http_server.php	/^    $http = new swoole_http_server('127.0.0.1', 8080);$/;"	v
+success	http_server.php	/^    $success = $http->start();$/;"	v
+wsServer	oop_ws_server.php	/^class wsServer$/;"	c
+serv	tcp_server.php	/^$serv = new swoole_server("127.0.0.1", 9501);$/;"	v
+serv	udp_server.php	/^    $serv = new swoole_server('127.0.0.1', 9502, SWOOLE_PROCESS, SWOOLE_SOCK_UDP);$/;"	v
+server	websocket_server.php	/^$server = new swoole_websocket_server('0.0.0.0', 9501);$/;"	v
